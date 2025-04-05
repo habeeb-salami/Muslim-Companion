@@ -4,7 +4,7 @@ chrome.alarms.onAlarm.addListener(() => {
   chrome.action.setBadgeText({ text: '' });
   chrome.notifications.create({
     type: 'basic',
-    iconUrl: 'stay_hydrated.png',
+    iconUrl: './images/ramadan.png',
     title: 'Time For Salat',
     message: "Just want to remind you is time for Salat!",
     buttons: [{ title: 'Go Pray.' }],
