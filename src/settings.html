@@ -1,0 +1,45 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko" lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<head>
+    <title>Cross-Browser QRCode generator for Javascript</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+    <link href="styles/bootstrap.min.css" rel="stylesheet" />
+    <link href="styles/styles.css" rel="stylesheet" />
+
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>  <a href="home.html">Islamical  </a></h1>
+            <hr />
+        </header>
+        <a href="home.html" class="btn btn-warning">
+            Home
+        </a>
+        <div id="settingsDiv">
+            <form>
+                <label>Set Frequency of daily notification</label>
+                <input type="range" id="points" name="points" value="2" step="1" min="1" max="5" />
+                <img src="./stay_hydrated.png" id="hydrateImage" />
+                <!-- An Alarm delay of less than the minimum 1 minute will fire
+                  in approximately 1 minute increments if released -->
+                <button class="btn btn-primary" id="sampleMinute" value="1">1 minute</button>
+                <button class="btn btn-secondary" id="min15" value="15">15 Minutes</button>
+                <button class="btn btn-warning" id="min30" value="30">30 Minutes</button>
+                <button class="btn btn-danger" id="cancelAlarm">Cancel Alarm</button>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/scripts.js"></script>
+
+</body>
+
+</html>

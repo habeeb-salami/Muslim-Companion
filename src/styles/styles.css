@@ -1,0 +1,23 @@
+body {
+  text-align: center;
+  background-color: #80deea;
+  background-image: url("../img/bg.jpg"), url("../img/bg2.jpg");
+  background-repeat: no-repeat, repeat;
+  background-size: cover;
+  width: 450px;
+  height: 550px;
+}
+h1{color: #fff;}
+#hydrateImage {
+  width: 100px;
+  margin: 5px;
+}
+
+button {
+  margin: 5px;
+  outline: none;
+}
+
+button:hover {
+  outline: #80deea dotted thick;
+}
