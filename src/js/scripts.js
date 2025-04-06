@@ -15,12 +15,12 @@ function clearAlarm() {
     window.close();
 }
 $(function () {
-    // chrome.notifications.create('notificationId', {
-    //     type: 'basic',
-    //     iconUrl: './images/ramadan.png', 
-    //     title: 'My Notification',
-    //     message: 'This is a basic notification!'
-    // });
+    chrome.notifications.create('notificationId', {
+        type: 'basic',
+        iconUrl: './images/ramadan.png', 
+        title: 'Salat Notification',
+        message: "Salam Alaikum, Time for Salat!!!"
+    });
 
     $("#sampleMinute").click(setAlarm);
     $("#min15").click(setAlarm);

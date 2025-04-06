@@ -5,7 +5,7 @@
     "description": "Islams For Muslims, this reminds of prayer times, Jumat Kahfi Recitation Reminder, and many more",
     "action": {
         "default_title": "Islams for Muslims",
-        "default_popup": "src/home.html"
+        "default_popup": "./src/home.html"
     },
     "permissions": [
         "storage",
@@ -13,6 +13,10 @@
         "alarms"
     ],
     "background": {
-        "service_worker": "src/js/background.js"
-    }
+        "service_worker": "./src/js/background.js"
+    },
+    "icons": {
+    "16": "./src/images/ramadan.png",
+    "128": "./src/images/ramadan.png"
+  }
 }
