@@ -29,7 +29,7 @@ button:hover {
 }
 
 
-div {
+div#quote {
   position: relative;
   width: 600px;
   margin: auto;
@@ -49,8 +49,8 @@ div {
   filter: drop-shadow(0 0 15px #0005);
 }
 
-div::before,
-div::after {
+div#quote::before,
+div#quote::after {
   position: absolute;
   z-index: -1;
   display: block;
@@ -62,21 +62,21 @@ div::after {
   font-family: Georgia, Times, Garamond, serif;
 }
 
-div::before {
+div#quote::before {
   top: -2rem;
   left: 1rem;
   content: open-quote;
 }
 
-div::after {
+div#quote::after {
   bottom: -1rem;
   right: 1rem;
   content: close-quote;
 }
 
-div::before,
-div::after,
-div h2 {
+div#quote::before,
+div#quote::after,
+div#quote h2 {
   text-shadow: -2px 2px #fff, -1.5px 1.5px #fff, -1px 1px #fff, -0.5px 0.5px #fff;
 }
 
