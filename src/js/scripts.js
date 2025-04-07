@@ -31,10 +31,21 @@ $(function () {
 
 
 async function fetchData() {
-    const res=await fetch ("https://api.coronavirus.data.gov.uk/v1/data");
-    const record=await res.json();
-    document.getElementById("date").innerHTML=record.data[0].date;
-    document.getElementById("areaName").innerHTML=record.data[0].areaName;
-    document.getElementById("latestBy").innerHTML=record.data[0].latestBy;
-    document.getElementById("deathNew").innerHTML=record.data[0].deathNew;
+    $.ajax({
+        headers: { "Accept": "application/json" },
+        type: 'GET',
+        url: "https://cdn.jsdelivr.net/npm/quran-json@3.1.2/dist/quran.json",
+        crossDomain: true,
+        beforeSend: function (xhr) {
+            xhr.withCredentials = true;
+        },
+        success: function (data, textStatus, request) {
+            let quote = '';
+            // console.log(data[0]);
+            for (var i = 0; i < data.length; i++) {
+                quote += "<li>"+data[i].name + " <br/>" + data[i].transliteration+"</li>"
+            }
+            $("#chapter-list").html(quote);
+        }
+    });
 }
