@@ -41,23 +41,25 @@ $(function () {
     //     title: 'Salat Notification',
     //     message: "Salam Alaikum, Time for Salat!!!"
     // });
+    let res = getData("http://127.0.0.1/islamical-backend/index.php");
+
     let hadithLink = "http://haya.zya.me/hadith/forties/nawawi40.json";
     let quranLink = "https://cdn.jsdelivr.net/npm/quran-json@3.1.2/dist/quran.json";
 
-    getData(quranLink).then(function (data) {
-        console.log(data);
-    },
-        function (err) {
-            console.log(err);
-        });
+    // getData(quranLink).then(function (data) {
+    //     console.log(data);
+    // },
+    //     function (err) {
+    //         console.log(err);
+    //     });
 
-    //get hadith
-    getData(hadithLink).then(function (data) {
-        console.log(data);
-    },
-        function (err) {
-            console.log(err);
-        });
+    // //get hadith
+    // getData(hadithLink).then(function (data) {
+    //     console.log(data);
+    // },
+    //     function (err) {
+    //         console.log(err);
+    //     });
     
 
     $("#sampleMinute").click(setAlarm);
