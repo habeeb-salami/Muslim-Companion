@@ -30,10 +30,36 @@
                 <img src="./images/ramadan.png" id="hydrateImage" />
                 <!-- An Alarm delay of less than the minimum 1 minute will fire
                   in approximately 1 minute increments if released -->
-                <button class="btn btn-primary" id="sampleMinute" value="1">1 minute</button>
+                <!-- <button class="btn btn-primary" id="sampleMinute" value="1">1 minute</button>
                 <button class="btn btn-secondary" id="min15" value="15">15 Minutes</button>
                 <button class="btn btn-warning" id="min30" value="30">30 Minutes</button>
-                <button class="btn btn-danger" id="cancelAlarm">Cancel Alarm</button>
+                <button class="btn btn-danger" id="cancelAlarm">Cancel Alarm</button> -->
+                <div class="container">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+                        <label class="form-check-label" for="switchCheckDefault">I want Daily hadith Quote.</label>
+                      </div>
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="switchCheckChecked" checked />
+                        <label class="form-check-label" for="switchCheckChecked">I want Daily Quran Ayah</label>
+                      </div>
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDisabled" />
+                        <label class="form-check-label" for="switchCheckDisabled">Remind Me of Salat Time</label>
+                      </div>
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="switchCheckCheckedDisabled" checked disabled>
+                        <label class="form-check-label" for="switchCheckCheckedDisabled">Remind Me to Recite Suratul Khafi on Friday</label>
+                      </div>
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="switchCheckCheckedDisabled" checked disabled>
+                        <label class="form-check-label" for="switchCheckCheckedDisabled">Remind Me of Monday & Thursday Fasting</label>
+                      </div>
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="switchCheckCheckedDisabled" checked disabled>
+                        <label class="form-check-label" for="switchCheckCheckedDisabled">Show Hijra Calender on Home Screen</label>
+                      </div>
+                </div>
             </form>
         </div>
     </div>

@@ -1,6 +1,6 @@
 'use strict';
 
-function setAlarm(event) {
+let setAlarm = (event) => {
     const minutes = parseFloat(event.target.value);
     console.log(minutes);
     chrome.action.setBadgeText({ text: 'ON' });
@@ -9,31 +9,27 @@ function setAlarm(event) {
     window.close();
 }
 
-function clearAlarm() {
+let clearAlarm = () => {
     chrome.action.setBadgeText({ text: '' });
     chrome.alarms.clearAll();
     window.close();
 }
-async function getData(link) {
-    $.ajax({
+let getData = async (link) => {
+    return $.ajax({
         headers: { "Accept": "application/json" },
         type: 'GET',
         url: link,
         crossDomain: true,
         beforeSend: function (xhr) {
             xhr.withCredentials = true;
-        },
-        success: function (data, textStatus, request) {
-            console.log(data);
-            // let quote = '';
-            // // console.log(data[0]);
-            // for (var i = 0; i < data.length; i++) {
-            //     quote += "<li>"+data[i].name + " <br/>" + data[i].transliteration+"</li>"
-            // }
-            // $("#chapter-list").html(quote);
         }
     });
 }
+
+let  getRndInteger = (min, max) =>{
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 $(function () {
     // chrome.notifications.create('notificationId', {
     //     type: 'basic',
@@ -41,33 +37,19 @@ $(function () {
     //     title: 'Salat Notification',
     //     message: "Salam Alaikum, Time for Salat!!!"
     // });
-    let res = getData("http://127.0.0.1/islamical-backend/index.php");
+    getData("http://127.0.0.1/islamical-backend/hadith/forties/qudsi40.json").then((res) => {
+        console.log(res.hadiths);
+        const randNumber = getRndInteger(0, res.hadiths.length);
+        $("#hadith").html(res.hadiths[randNumber].english.text);
+        $("#from").html(res.hadiths[randNumber].english.narrator);
+    });
 
     let hadithLink = "http://haya.zya.me/hadith/forties/nawawi40.json";
     let quranLink = "https://cdn.jsdelivr.net/npm/quran-json@3.1.2/dist/quran.json";
 
-    // getData(quranLink).then(function (data) {
-    //     console.log(data);
-    // },
-    //     function (err) {
-    //         console.log(err);
-    //     });
-
-    // //get hadith
-    // getData(hadithLink).then(function (data) {
-    //     console.log(data);
-    // },
-    //     function (err) {
-    //         console.log(err);
-    //     });
-    
 
     $("#sampleMinute").click(setAlarm);
     $("#min15").click(setAlarm);
     $("#min30").click(setAlarm);
     $("#cancelAlarm").click(clearAlarm);
 });
-
-
-
-
