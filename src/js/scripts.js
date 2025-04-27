@@ -26,7 +26,7 @@ let getData = async (link) => {
     });
 }
 
-let  getRndInteger = (min, max) =>{
+let getRndInteger = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
@@ -37,16 +37,23 @@ $(function () {
     //     title: 'Salat Notification',
     //     message: "Salam Alaikum, Time for Salat!!!"
     // });
-    getData("http://127.0.0.1/islamical-backend/hadith/forties/qudsi40.json").then((res) => {
-        console.log(res.hadiths);
+    const hadithLinks = [
+        'qudsi40.json',
+        'nawawi40.json',
+        'shahwaliullah40.json'
+    ];
+    console.log(hadithLinks);
+    const quranLink = ["https://cdn.jsdelivr.net/npm/quran-json@3.1.2/dist/quran.json"];
+    const hadithLink = "http://haya.zya.me/hadith/forties/nawawi40.json";
+
+    const hadith = "./hadiths/" + hadithLinks[getRndInteger(0, hadithLinks.length)];
+    // console.log(hadith);
+    getData(hadith).then((res) => {
+        // console.log(res.hadiths);
         const randNumber = getRndInteger(0, res.hadiths.length);
         $("#hadith").html(res.hadiths[randNumber].english.text);
         $("#from").html(res.hadiths[randNumber].english.narrator);
     });
-
-    let hadithLink = "http://haya.zya.me/hadith/forties/nawawi40.json";
-    let quranLink = "https://cdn.jsdelivr.net/npm/quran-json@3.1.2/dist/quran.json";
-
 
     $("#sampleMinute").click(setAlarm);
     $("#min15").click(setAlarm);
