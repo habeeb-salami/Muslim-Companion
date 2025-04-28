@@ -1,7 +1,6 @@
 body {
   text-align: center;
   background-color: #80deea;
-  background-image: url("../images/bg.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   display: flex;
@@ -88,3 +87,4 @@ p {
   margin-block-start: 1rem;
   text-indent: 2ch;
 }
+h4#from{text-align: justify;}

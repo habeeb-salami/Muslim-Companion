@@ -49,7 +49,7 @@ $(function () {
     const hadith = "./hadiths/" + hadithLinks[getRndInteger(0, hadithLinks.length)];
     // console.log(hadith);
     getData(hadith).then((res) => {
-        // console.log(res.hadiths);
+        console.log(res.hadiths);
         const randNumber = getRndInteger(0, res.hadiths.length);
         $("#hadith").html(res.hadiths[randNumber].english.text);
         $("#from").html(res.hadiths[randNumber].english.narrator);
