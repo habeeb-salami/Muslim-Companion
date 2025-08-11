@@ -31,12 +31,12 @@ let getRndInteger = (min, max) => {
 }
 
 $(function () {
-    // chrome.notifications.create('notificationId', {
-    //     type: 'basic',
-    //     iconUrl: './images/ramadan.png', 
-    //     title: 'Salat Notification',
-    //     message: "Salam Alaikum, Time for Salat!!!"
-    // });
+     chrome.notifications.create('notificationId', {
+         type: 'basic',
+        iconUrl: './images/ramadan.png', 
+         title: 'Salat Notification',
+         message: "Salam Alaikum, Time for Salat!!!"
+    });
     const hadithLinks = [
         'qudsi40.json',
         'nawawi40.json',
