@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Muslim Companion — Options</title>
+  <link rel="stylesheet" href="../src/styles/bootstrap.min.css" />
+  <style>
+    body { padding: 16px; }
+    .section { margin-bottom: 24px; }
+  </style>
+  <script defer src="options.js"></script>
+  <script defer src="../src/js/i18n.js"></script>
+  <link rel="icon" href="../src/images/ramadan.png" />
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self'; object-src 'self'">
+  </head>
+<body>
+  <div class="container">
+    <h1 data-i18n="nav.settings">Settings</h1>
+    <hr />
+
+    <form id="optionsForm">
+      <div class="section">
+        <h5>Language</h5>
+        <div class="row g-2">
+          <div class="col-sm-6">
+            <label for="language" class="form-label">Language</label>
+            <select class="form-select" id="language">
+              <option value="en">English</option>
+              <option value="ar">العربية</option>
+            </select>
+          </div>
+        </div>
+      </div>
+        <h5>Prayer Time Notifications</h5>
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" id="enablePrayerNotifications">
+          <label class="form-check-label" for="enablePrayerNotifications">Enable prayer time notifications</label>
+        </div>
+        <div class="row mt-2">
+          <div class="col-sm-6">
+            <label for="prayerReminderMinutes" class="form-label">Reminder minutes before prayer</label>
+            <input type="number" class="form-control" id="prayerReminderMinutes" min="0" max="60" step="1" placeholder="e.g. 5" />
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h5>Location</h5>
+        <div class="mb-2">
+          <label for="locationMode" class="form-label">Location mode</label>
+          <select class="form-select" id="locationMode">
+            <option value="auto">Auto (use device location)</option>
+            <option value="manual">Manual</option>
+          </select>
+        </div>
+        <div class="row g-2" id="manualLocationFields">
+          <div class="col-sm-6">
+            <label for="manualLat" class="form-label">Latitude</label>
+            <input type="number" class="form-control" id="manualLat" step="0.000001" placeholder="e.g. 24.7136" />
+          </div>
+          <div class="col-sm-6">
+            <label for="manualLon" class="form-label">Longitude</label>
+            <input type="number" class="form-control" id="manualLon" step="0.000001" placeholder="e.g. 46.6753" />
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h5>Daily Content</h5>
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" id="enableHadithNotification">
+          <label class="form-check-label" for="enableHadithNotification">Daily Hadith notification</label>
+        </div>
+        <div class="row mt-2">
+          <div class="col-sm-6">
+            <label for="hadithNotificationTime" class="form-label">Hadith notification time</label>
+            <input type="time" class="form-control" id="hadithNotificationTime" />
+          </div>
+        </div>
+        <div class="form-check form-switch mt-3">
+          <input class="form-check-input" type="checkbox" id="enableQuranNotification">
+          <label class="form-check-label" for="enableQuranNotification">Daily Quran verse notification</label>
+        </div>
+        <div class="row mt-2">
+          <div class="col-sm-6">
+            <label for="quranNotificationTime" class="form-label">Quran notification time</label>
+            <input type="time" class="form-control" id="quranNotificationTime" />
+          </div>
+        </div>
+        <div class="form-check form-switch mt-3">
+          <input class="form-check-input" type="checkbox" id="enableEventNotification">
+          <label class="form-check-label" for="enableEventNotification">Islamic event notifications</label>
+        </div>
+        <div class="row mt-2">
+          <div class="col-sm-6">
+            <label for="eventNotificationTime" class="form-label">Event notification time</label>
+            <input type="time" class="form-control" id="eventNotificationTime" />
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary" id="saveBtn">Save</button>
+        <button type="button" class="btn btn-secondary" id="resetBtn">Reset to defaults</button>
+        <span id="status" class="ms-2"></span>
+      </div>
+    </form>
+  </div>
+</body>
+</html>
+
+

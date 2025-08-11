@@ -1,0 +1,21 @@
+{
+  "app.title": "Islamical",
+  "nav.settings": "Settings",
+  "nav.about": "About",
+  "nav.home": "Home",
+  "section.quran": "Daily Quran",
+  "section.tafsir": "Tafsir",
+  "section.hadith": "Daily Hadith",
+  "section.qibla": "Qibla Compass",
+  "section.hijri": "Hijri Calendar",
+  "qibla.calculating": "Calculating Qibla…",
+  "qibla.enableCompass": "Enable Compass",
+
+  "notif.hadithDailyTitle": "Daily Hadith",
+  "notif.quranDailyTitle": "Daily Quran Verse",
+  "notif.eventTitle": "Islamic Event Today",
+  "notif.prayerReminderTitle": "%s Reminder",
+  "notif.prayerReminderBody": "It's almost time for %s."
+}
+
+

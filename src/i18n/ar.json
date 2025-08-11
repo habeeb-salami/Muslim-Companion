@@ -1,0 +1,21 @@
+{
+  "app.title": "إسلاميكال",
+  "nav.settings": "الإعدادات",
+  "nav.about": "حول",
+  "nav.home": "الرئيسية",
+  "section.quran": "آية اليوم",
+  "section.tafsir": "تفسير",
+  "section.hadith": "حديث اليوم",
+  "section.qibla": "بوصلة القبلة",
+  "section.hijri": "التقويم الهجري",
+  "qibla.calculating": "جارٍ حساب القبلة…",
+  "qibla.enableCompass": "تفعيل البوصلة",
+
+  "notif.hadithDailyTitle": "حديث اليوم",
+  "notif.quranDailyTitle": "آية اليوم",
+  "notif.eventTitle": "حدث إسلامي اليوم",
+  "notif.prayerReminderTitle": "%s تذكير",
+  "notif.prayerReminderBody": "حان وقت %s تقريبًا."
+}
+
+
