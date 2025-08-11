@@ -18,10 +18,9 @@
   },
   "options_page": "options/index.html",
   "icons": {
-    "16": "./src/images/ramadan.png",
-    "48": "./src/images/ramadan.png",
-    "96": "./src/images/ramadan.png",
-    "128": "./src/images/ramadan.png"
+    "16": "/src/images/ramadan-16x16.png",
+    "48": "/src/images/ramadan-48x48.png",
+    "128": "/src/images/ramadan-128x128.png"
   },
   "host_permissions": [
     "https://api.quran.com/*"
