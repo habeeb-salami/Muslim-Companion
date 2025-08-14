@@ -17,7 +17,7 @@ function toDegrees(rad) { return (rad * 180) / Math.PI; }
 
 function fixAngle(a) { return a - 360 * (Math.floor(a / 360)); }
 
-function julianDate(year, month, day) {
+const julianDate = (year, month, day) => {
   if (month <= 2) { year -= 1; month += 12; }
   const A = Math.floor(year / 100);
   const B = 2 - A + Math.floor(A / 4);
@@ -25,7 +25,7 @@ function julianDate(year, month, day) {
   return JD;
 }
 
-function sunPosition(jd) {
+const sunPosition = (jd) => {
   const D = jd - 2451545.0;
   const g = fixAngle(357.529 + 0.98560028 * D);
   const q = fixAngle(280.459 + 0.98564736 * D);
@@ -39,21 +39,21 @@ function sunPosition(jd) {
 
 function fixHour(h) { return h - 24 * Math.floor(h / 24); }
 
-function midDay(jd, tz, lon) {
+const midDay = (jd, tz, lon) => {
   const sp = sunPosition(jd - lon / 360);
   const Z = fixHour(12 - sp.equation);
   return Z;
 }
 
-function hourAngle(angle, lat, decl) {
+const hourAngle = (angle, lat, decl) => {
   const term = (Math.cos(toRadians(angle)) - Math.sin(toRadians(lat)) * Math.sin(toRadians(decl))) /
-               (Math.cos(toRadians(lat)) * Math.cos(toRadians(decl)));
+    (Math.cos(toRadians(lat)) * Math.cos(toRadians(decl)));
   // avoid NaN from floating errors
   const clamped = Math.min(1, Math.max(-1, term));
   return toDegrees(Math.acos(clamped)) / 15;
 }
 
-function computeTimes(date, lat, lon, tzOffsetMinutes, method) {
+const computeTimes = (date, lat, lon, tzOffsetMinutes, method) => {
   const y = date.getFullYear();
   const m = date.getMonth() + 1;
   const d = date.getDate();
@@ -93,7 +93,7 @@ function computeTimes(date, lat, lon, tzOffsetMinutes, method) {
   const asrHA = asrHourAngle(lat, decl, asrShadowFactor);
   const asr = Z + asrHA;
 
-  function toDate(hoursFraction) {
+  const toDate = (hoursFraction) => {
     const local = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0);
     const ms = Math.round(hoursFraction * 3600 * 1000);
     local.setTime(local.getTime() + ms);
@@ -110,7 +110,7 @@ function computeTimes(date, lat, lon, tzOffsetMinutes, method) {
   };
 }
 
-function asrHourAngle(lat, decl, factor) {
+const asrHourAngle = (lat, decl, factor) => {
   // angle for Asr shadow factor
   const phi = Math.abs(lat);
   const angle = toDegrees(Math.atan(1 / (factor + Math.tan(Math.abs(phi - decl) * Math.PI / 180))));
@@ -119,7 +119,7 @@ function asrHourAngle(lat, decl, factor) {
   return ha;
 }
 
-function getPrayerTimes(date, coords, options) {
+const getPrayerTimes = (date, coords, options) => {
   const { latitude, longitude } = coords;
   const tzOffsetMinutes = date.getTimezoneOffset();
   const method = options?.method || PrayerCalcMethod.MWL;

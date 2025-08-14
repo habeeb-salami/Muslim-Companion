@@ -11,20 +11,17 @@
     "storage",
     "notifications",
     "alarms",
+    "alarms",
     "geolocation"
   ],
   "background": {
     "service_worker": "./src/js/background.js"
   },
-  "options_page": "options/index.html",
+  "options_page": "options/options.html",
   "icons": {
     "16": "/src/images/ramadan-16x16.png",
     "48": "/src/images/ramadan-48x48.png",
     "128": "/src/images/ramadan-128x128.png"
   },
-  "host_permissions": [
-    "https://api.quran.com/*"
-  ],
-  
   "minimum_chrome_version": "112"
 }

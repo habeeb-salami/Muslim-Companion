@@ -75,7 +75,7 @@ $(function () {
         }); 
     });
 
-    // Daily Quran section: try cached verse first; if missing (e.g., first run before alarm), fetch once
+    // Daily Quran section: try cached verse first; if missing (e.g., first run before alarm), load from local quran.json and translations
     (async function loadDailyQuran() {
         const today = todayKey();
         const stored = await chrome.storage.local.get([DAILY_VERSE_KEY, DAILY_VERSE_DATE]);
@@ -84,21 +84,72 @@ $(function () {
             verse = stored[DAILY_VERSE_KEY];
         } else {
             try {
+                // Get user's language preference
+                const settings = await chrome.storage.local.get(['muslimCompanionSettings']);
+                const userLanguage = settings.muslimCompanionSettings?.language || 'en';
+                
+                // Load local quran.json file (Arabic text)
+                const quranUrl = chrome.runtime.getURL('src/quran/quran.json');
+                const response = await fetch(quranUrl);
+                const quranData = await response.json();
+                
+                // Load translation file based on user language
+                let translationData = null;
+                try {
+                    const translationUrl = chrome.runtime.getURL(`src/quran/editions/${userLanguage}.json`);
+                    const translationResponse = await fetch(translationUrl);
+                    translationData = await translationResponse.json();
+                } catch (translationError) {
+                    console.log(`Translation for ${userLanguage} not available, using English as fallback`);
+                    // Fallback to English if user's language is not available
+                    try {
+                        const fallbackUrl = chrome.runtime.getURL('src/quran/editions/en.json');
+                        const fallbackResponse = await fetch(fallbackUrl);
+                        translationData = await fallbackResponse.json();
+                    } catch (fallbackError) {
+                        console.error('Could not load any translation:', fallbackError);
+                    }
+                }
+                
                 const totalVerses = 6236;
                 const days = getDaysSinceEpoch();
                 const verseId = (days % totalVerses) + 1;
-                const metaUrl = `https://api.quran.com/api/v4/verses/by_key/${verseId}?language=en&fields=text_uthmani`;
-                const transUrl = `https://api.quran.com/api/v4/quran/translations/131?verse_key=${verseId}`;
-                const [metaRes, transRes] = await Promise.all([fetch(metaUrl), fetch(transUrl)]);
-                const metaJson = await metaRes.json();
-                const transJson = await transRes.json();
-                const verseKey = metaJson?.verse?.verse_key || `v${verseId}`;
-                const text = metaJson?.verse?.text_uthmani || '';
-                const translation = transJson?.translations?.[0]?.text || '';
-                const tafsirLink = `https://quran.com/${verseKey.replace(':','/')}`;
-                verse = { verseId, verseKey, text, translation, tafsirLink };
-                await chrome.storage.local.set({ [DAILY_VERSE_KEY]: verse, [DAILY_VERSE_DATE]: today });
-            } catch (_) {
+                
+                // Find the verse in local data
+                let foundVerse = null;
+                let foundTranslation = null;
+                let currentVerseCount = 0;
+                
+                // Iterate through chapters to find the specific verse
+                for (const chapterNum in quranData) {
+                    const chapter = quranData[chapterNum];
+                    if (currentVerseCount + chapter.length >= verseId) {
+                        const verseIndex = verseId - currentVerseCount - 1;
+                        if (verseIndex >= 0 && verseIndex < chapter.length) {
+                            foundVerse = chapter[verseIndex];
+                            // Find corresponding translation
+                            if (translationData && translationData[chapterNum]) {
+                                foundTranslation = translationData[chapterNum][verseIndex];
+                            }
+                            break;
+                        }
+                    }
+                    currentVerseCount += chapter.length;
+                }
+                
+                if (foundVerse) {
+                    const verseKey = `${foundVerse.chapter}:${foundVerse.verse}`;
+                    verse = {
+                        verseId,
+                        verseKey,
+                        text: foundVerse.text,
+                        translation: foundTranslation?.text || '',
+                        tafsirLink: `https://quran.com/${verseKey.replace(':','/')}`
+                    };
+                    await chrome.storage.local.set({ [DAILY_VERSE_KEY]: verse, [DAILY_VERSE_DATE]: today });
+                }
+            } catch (error) {
+                console.error('Error loading local Quran data:', error);
                 // ignore and leave verse null
             }
         }

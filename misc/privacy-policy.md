@@ -58,10 +58,15 @@ Muslim Companion ("we," "our," or "us") is committed to protecting your privacy.
 
 ## Third-Party Services
 
-### Quran API
-- We use the Quran.com API to fetch daily Quran verses and translations
-- This service may have its own privacy policy and data collection practices
-- We recommend reviewing their privacy policy at [quran.com](https://quran.com)
+### External Links
+- We provide links to external resources like [quran.com](https://quran.com) for additional Islamic content and tafsir
+- These external sites have their own privacy policies and data collection practices
+- We recommend reviewing their privacy policies when visiting external sites
+
+### Local Content
+- All Quran verses and translations are stored locally in the extension
+- No external API calls are made for Quran content
+- Translations are available in multiple languages including English, Arabic, Spanish, French, and more
 
 ### Location Services
 - When you enable location services, your device's GPS coordinates are used locally

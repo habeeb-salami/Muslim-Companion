@@ -8,44 +8,83 @@
     <title>Muslim Companion</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
-    <link href="styles/bootstrap.min.css" rel="stylesheet" />
-      <!--style reference from the Calendar component-->
-      <link href="./styles/ej2-base-material.css" rel="stylesheet">
-      <link href="./styles/ej2-buttons-material.css" rel="stylesheet">
-      <link href="./styles/ej2-calendars-material.css" rel="stylesheet">
-      <!--style reference from app-->
-      <link href="./styles/styles.css" rel="stylesheet">
-      
-      
-  <script src="./js/ej2.min.js" type="text/javascript"></script>
-  <script src="./js/syncfusion-helper.js" type ="text/javascript"></script>
-    <link href="./styles/styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles/tailwind.css" />
+    <!-- <link rel="stylesheet" href="./styles/styles.css"> -->
+    <!--style reference from app-->
+    <link href="./styles/styles.css" rel="stylesheet">
+    <!--style reference from the Calendar component-->
+    <link href="./styles/ej2-base-material.css" rel="stylesheet">
+    <link href="./styles/ej2-buttons-material.css" rel="stylesheet">
+    <link href="./styles/ej2-calendars-material.css" rel="stylesheet">
+    <script src="./js/ej2.min.js" type="text/javascript"></script>
+    <script src="./js/syncfusion-helper.js" type="text/javascript"></script>
 </head>
-
 <body>
-    <div class="container">
-        <header>
-            <h1 class="text-center">
-                 <a href="home.html" data-i18n="app.title">Muslim Companion</a>
-                </h1>
-            <hr />
-        </header>
 
-        <a href="../options/index.html" class="btn btn-primary" data-i18n="nav.settings">
-            Settings
-        </a>
-        <!-- <a href="#about" class="btn btn-secondary" data-i18n="nav.about">
-            About
-        </a>
-        <a href="#home" class="btn btn-warning" data-i18n="nav.home">
-            Home
-        </a> -->
-        <a href="../privacy-policy.html" target="_blank" class="btn btn-outline-info btn-sm">
-            Privacy Policy
-        </a>
-        <div id="salat-time">
-   
+    <!-- Navbar -->
+    <nav class="flex justify-between items-center">
+        <div class="flex gap-4 items-center">
+            <span>🕌</span>
+            <span class="text-lg">Muslim Companion</span>
+            <div class="menu-toggle" id="menuToggle">&#9776;</div>
         </div>
+        <a href="../options/index.html" data-i18n="nav.settings">Settings</a>
+        <a href="../privacy-policy.html" target="_blank">Privacy Policy</a>
+        <div class="flex gap-4 items-center">
+            <button id="darkModeToggle" title="Toggle Dark Mode">🌓</button>
+        </div>
+    </nav>
+    <div id="salat-time">
+    </div>
+    <!-- Daily Quran & Hadith -->
+    <div class="flex justify-center gap-4 p-4">
+        <div class="glass p-4 rounded-xl shadow-lg fade-in" style="flex:1;">
+            <h3 class="text-lg mb-4" data-i18n="section.quran">📖 Daily Quran</h3>
+            <p id="quran-ref" class="text-center"></p>
+            <p id="quran-translation" class="text-center"></p>
+        </div>
+    </div>
+    <div class="glass p-4 rounded-xl shadow-lg fade-in" style="flex:1;">
+        <h3 class="text-lg mb-4">🕌 Daily Hadith</h3>
+        <p id="from" class="text-center"></p>
+        <p id="hadith" class="text-center"></p>
+    </div>
+    <!-- Main Sections -->
+    <div class="flex justify-center gap-4 p-4">
+        <!-- Qibla Section -->
+        <div class="glass p-4 rounded-xl shadow-lg fade-in" style="flex:1; min-height:200px;">
+            <h2 class="text-xl mb-4" data-i18n="section.qibla">🧭 Qibla Direction</h2>
+            <div style="position: relative; width: 200px; height: 200px; margin: 0 auto;">
+                <div style="position: absolute; left: 50%; top: 100%; transform: translate(-50%, -100%) rotate(0deg); width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 120px solid #d9534f; transform-origin: 50% 100%;"
+                    id="qibla-arrow"></div>
+                <div
+                    style="position:absolute; left:0; top:0; right:0; bottom:0; border:2px solid #ccc; border-radius: 50%;">
+                </div>
+            </div>
+            <div class="text-center mt-2" id="qibla-info" data-i18n="qibla.calculating">Calculating Qibla…</div>
+            <div class="text-center mt-2">
+                <button class="btn btn-outline-primary btn-sm" id="enableCompassBtn"
+                    data-i18n="qibla.enableCompass">Enable
+                    Compass</button>
+            </div>
+        </div>
+        <!-- Hijri Calendar -->
+        <div class="glass p-4 rounded-xl shadow-lg fade-in" style="flex:1; min-height:200px;">
+            <h2 class="text-xl mb-4" data-i18n="section.hijri">📅 Hijri Calendar</h2>
+            <!-- <p>18 Muharram 1447</p> -->
+            <div id="element"></div>
+        </div>
+        <!-- Analog Clock -->
+        <div class="glass p-4 rounded-xl shadow-lg fade-in" style="flex:1; min-height:200px;">
+            <h2 class="text-xl mb-4">Time For Salat</h2>
+            <canvas id="analogClock" width="200" height="200"></canvas>
+        </div>
+    </div>
+    <footer class="text-center mt-4">
+        <p data-i18n="footer.copyright">© 2023 Muslim Companion</p>
+        <p data-i18n="footer.version">Version: 1.0.0</p>
+    </footer>
+    <!-- <div class="container">
         <div id="quran">
             <h2 data-i18n="section.quran">Daily Quran</h2>
             <h4 id="quran-ref"></h4>
@@ -53,23 +92,27 @@
             <a id="quran-tafsir" target="_blank" rel="noopener noreferrer" data-i18n="section.tafsir">Tafsir</a>
         </div>
         <hr />
-        <div id="quote">
+        <div id="quote" class="card">
             <h2 data-i18n="section.hadith">Daily Hadith</h2>
             <h4 id="from"></h4>
             <p id="hadith">
             </p>
-           
         </div>
         <hr />
         <div id="qibla" class="my-3">
             <h2 data-i18n="section.qibla">Qibla Compass</h2>
             <div style="position: relative; width: 200px; height: 200px; margin: 0 auto;">
-                <div style="position: absolute; left: 50%; top: 100%; transform: translate(-50%, -100%) rotate(0deg); width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 120px solid #d9534f; transform-origin: 50% 100%;" id="qibla-arrow"></div>
-                <div style="position:absolute; left:0; top:0; right:0; bottom:0; border:2px solid #ccc; border-radius: 50%;"></div>
+                <div style="position: absolute; left: 50%; top: 100%; transform: translate(-50%, -100%) rotate(0deg); width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 120px solid #d9534f; transform-origin: 50% 100%;"
+                    id="qibla-arrow"></div>
+                <div
+                    style="position:absolute; left:0; top:0; right:0; bottom:0; border:2px solid #ccc; border-radius: 50%;">
+                </div>
             </div>
             <div class="text-center mt-2" id="qibla-info" data-i18n="qibla.calculating">Calculating Qibla…</div>
             <div class="text-center mt-2">
-                <button class="btn btn-outline-primary btn-sm" id="enableCompassBtn" data-i18n="qibla.enableCompass">Enable Compass</button>
+                <button class="btn btn-outline-primary btn-sm" id="enableCompassBtn"
+                    data-i18n="qibla.enableCompass">Enable
+                    Compass</button>
             </div>
         </div>
         <hr />
@@ -77,16 +120,21 @@
             <h2 data-i18n="section.hijri">Hijri Calendar</h2>
             <div id="element"></div>
         </div>
-        
     </div>
+    <footer class="text-center mt-4">
+        <p data-i18n="footer.copyright">© 2023 Muslim Companion</p>
+        <p data-i18n="footer.version">Version: 1.0.0</p>
+    </footer> -->
     <script src="./js/jquery.min.js"></script>
-    <script src="./js/bootstrap.bundle.min.js"></script>
     <script src="./js/scripts.js"></script>
+    <script src="./js/home.js"></script>
     <script src="./js/i18n.js"></script>
     <script src="./js/language.js"></script>
     <script src="./js/qibla.js"></script>
     <script src="./js/index.js"></script>
-
+    <script src="./js/ej2.min.js"></script>
+    <!--style reference from app-->
+    </script>
 </body>
 
 </html>

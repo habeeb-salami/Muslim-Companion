@@ -1,8 +1,8 @@
 'use strict';
 
-const SETTINGS_KEY = 'settings';
-const DAILY_VERSE_KEY = 'dailyVerse';
-const DAILY_VERSE_DATE = 'dailyVerseDate';
+const SETTINGS_KEY = 'muslimCompanionSettings';
+const DAILY_VERSE_KEY = 'muslimCompaniondailyVerse';
+const DAILY_VERSE_DATE = 'muslimCompaniondailyVerseDate';
 
 // Ensure praytimes is available in worker
 try { importScripts('praytimes.js'); } catch (e) {}
@@ -14,7 +14,7 @@ function selectHadithFileName(days) {
   return files[days % files.length];
 }
 
-async function getHadithOfDayText() {
+const getHadithOfDayText = async () => {
   try {
     const days = getDaysSinceEpoch();
     const filePath = selectHadithFileName(days);
@@ -44,12 +44,15 @@ function parseTimeToNextWhen(localTimeHHMM) {
   return next.getTime();
 }
 
-async function scheduleAlarmsFromSettings() {
-  const { settings } = await chrome.storage.local.get([SETTINGS_KEY]);
-  const s = settings || {};
+const scheduleAlarmsFromSettings= async () => {
+  const result = await chrome.storage.local.get([SETTINGS_KEY]);
+  console.log('Getting settings for alarms:', result);
+  const s = result[SETTINGS_KEY] || {};
+  console.log('Settings for alarms:', s);
 
   // Clear known alarms first
   await chrome.alarms.clear('dailyHadith');
+  await chrome.alarms.clear('dailyEvents');
   await chrome.alarms.clear('prayerCheck');
   await chrome.alarms.clear('Fajr');
   await chrome.alarms.clear('Dhuhr');
@@ -60,6 +63,7 @@ async function scheduleAlarmsFromSettings() {
 
   if (s.enableHadithNotification) {
     const when = parseTimeToNextWhen(s.hadithNotificationTime);
+    console.log('Creating hadith alarm for:', new Date(when));
     chrome.alarms.create('dailyHadith', { when, periodInMinutes: 24 * 60 });
   }
 
@@ -67,14 +71,18 @@ async function scheduleAlarmsFromSettings() {
   await chrome.alarms.clear('dailyVerse');
   if (s.enableQuranNotification) {
     const verseTime = s.quranNotificationTime || s.hadithNotificationTime || '08:00';
-    chrome.alarms.create('dailyVerse', { when: parseTimeToNextWhen(verseTime), periodInMinutes: 24 * 60 });
+    const when = parseTimeToNextWhen(verseTime);
+    console.log('Creating Quran alarm for:', new Date(when));
+    chrome.alarms.create('dailyVerse', { when, periodInMinutes: 24 * 60 });
   }
 
   // Islamic event daily check alarm
   await chrome.alarms.clear('dailyEvents');
   if (s.enableEventNotification) {
     const eventTime = s.eventNotificationTime || '09:00';
-    chrome.alarms.create('dailyEvents', { when: parseTimeToNextWhen(eventTime), periodInMinutes: 24 * 60 });
+    const when = parseTimeToNextWhen(eventTime);
+    console.log('Creating event alarm for:', new Date(when));
+    chrome.alarms.create('dailyEvents', { when, periodInMinutes: 24 * 60 });
   }
 
   if (s.enablePrayerNotifications) {
@@ -91,7 +99,7 @@ async function scheduleAlarmsFromSettings() {
   }
 }
 
-function schedulePrayerAlarms(times, reminderMinutes) {
+const schedulePrayerAlarms= (times, reminderMinutes) =>{
   if (!times) return;
   const entries = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
   for (const name of entries) {
@@ -128,7 +136,9 @@ chrome.runtime.onStartup?.addListener(() => {
 });
 
 chrome.storage.onChanged.addListener((changes, area) => {
+  console.log('Storage changed:', changes, area);
   if (area === 'local' && changes[SETTINGS_KEY]) {
+    console.log('Settings changed, rescheduling alarms');
     scheduleAlarmsFromSettings();
   }
 });
@@ -150,7 +160,7 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
   if (alarm.name === 'dailyVerse') {
     const v = await getDailyVerse();
     const title = 'Daily Quran Verse';
-    const message = v?.translation ? `${v.verseKey}: ${v.translation}` : (v?.text || '');
+    const message = v?.translation ? `${v.verseKey}: ${v.translation}` : (v?.text ? `${v.verseKey}: ${v.text}` : 'Verse unavailable');
     chrome.notifications.create({
       type: 'basic',
       iconUrl: '../images/ramadan.png',
@@ -181,7 +191,7 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
   }
 });
 
-// Daily Quran Verse implementation
+// Daily Quran Verse implementation using local quran.json and translations
 async function getDailyVerse() {
   const today = new Date().toISOString().slice(0,10);
   const stored = await chrome.storage.local.get([DAILY_VERSE_KEY, DAILY_VERSE_DATE]);
@@ -189,31 +199,84 @@ async function getDailyVerse() {
     return stored[DAILY_VERSE_KEY];
   }
 
-  // Pick a deterministic verse id (1..6236) by day
-  const totalVerses = 6236;
-  const days = getDaysSinceEpoch();
-  const verseId = (days % totalVerses) + 1;
-
   try {
-    const metaUrl = `https://api.quran.com/api/v4/verses/by_key/${verseId}?language=en&fields=text_uthmani`;
-    const transUrl = `https://api.quran.com/api/v4/quran/translations/131?verse_key=${verseId}`; // 131=Saheeh International
-    const [metaRes, transRes] = await Promise.all([fetch(metaUrl), fetch(transUrl)]);
-    const metaJson = await metaRes.json();
-    const transJson = await transRes.json();
-    const verseKey = metaJson?.verse?.verse_key || `v${verseId}`;
-    const text = metaJson?.verse?.text_uthmani || '';
-    const translation = transJson?.translations?.[0]?.text || '';
-    const tafsirLink = `https://quran.com/${verseKey.replace(':','/')}`;
-    const result = { verseId, verseKey, text, translation, tafsirLink };
-    await chrome.storage.local.set({ [DAILY_VERSE_KEY]: result, [DAILY_VERSE_DATE]: today });
-    return result;
-  } catch (_) {
+    // Get user's language preference
+    const settings = await chrome.storage.local.get(['muslimCompanionSettings']);
+    const userLanguage = settings.muslimCompanionSettings?.language || 'en';
+    
+    // Load local quran.json file (Arabic text)
+    const quranUrl = chrome.runtime.getURL('src/quran/quran.json');
+    const response = await fetch(quranUrl);
+    const quranData = await response.json();
+    
+    // Load translation file based on user language
+    let translationData = null;
+    try {
+      const translationUrl = chrome.runtime.getURL(`src/quran/editions/${userLanguage}.json`);
+      const translationResponse = await fetch(translationUrl);
+      translationData = await translationResponse.json();
+    } catch (translationError) {
+      console.log(`Translation for ${userLanguage} not available, using English as fallback`);
+      // Fallback to English if user's language is not available
+      try {
+        const fallbackUrl = chrome.runtime.getURL('src/quran/editions/en.json');
+        const fallbackResponse = await fetch(fallbackUrl);
+        translationData = await fallbackResponse.json();
+      } catch (fallbackError) {
+        console.error('Could not load any translation:', fallbackError);
+      }
+    }
+    
+    // Calculate verse based on day
+    const days = getDaysSinceEpoch();
+    const totalVerses = 6236; // Total verses in Quran
+    const verseId = (days % totalVerses) + 1;
+    
+    // Find the verse in local data
+    let foundVerse = null;
+    let foundTranslation = null;
+    let currentVerseCount = 0;
+    
+    // Iterate through chapters to find the specific verse
+    for (const chapterNum in quranData) {
+      const chapter = quranData[chapterNum];
+      if (currentVerseCount + chapter.length >= verseId) {
+        const verseIndex = verseId - currentVerseCount - 1;
+        if (verseIndex >= 0 && verseIndex < chapter.length) {
+          foundVerse = chapter[verseIndex];
+          // Find corresponding translation
+          if (translationData && translationData[chapterNum]) {
+            foundTranslation = translationData[chapterNum][verseIndex];
+          }
+          break;
+        }
+      }
+      currentVerseCount += chapter.length;
+    }
+    
+    if (foundVerse) {
+      const verseKey = `${foundVerse.chapter}:${foundVerse.verse}`;
+      const result = {
+        verseId,
+        verseKey,
+        text: foundVerse.text,
+        translation: foundTranslation?.text || '',
+        tafsirLink: `https://quran.com/${verseKey.replace(':','/')}`
+      };
+      
+      await chrome.storage.local.set({ [DAILY_VERSE_KEY]: result, [DAILY_VERSE_DATE]: today });
+      return result;
+    }
+    
+    return stored[DAILY_VERSE_KEY] || null;
+  } catch (error) {
+    console.error('Error loading local Quran data:', error);
     return stored[DAILY_VERSE_KEY] || null;
   }
 }
 
 // Islamic event notifier using the same event list as calendar (duplicated minimal list)
-function getHijriToday() {
+const getHijriToday=() =>{
   try {
     const parts = new Intl.DateTimeFormat('en-u-ca-islamic', { day: 'numeric', month: 'numeric' }).formatToParts(new Date());
     const month = parseInt(parts.find(p=>p.type==='month').value,10);
@@ -224,7 +287,7 @@ function getHijriToday() {
   }
 }
 
-async function maybeNotifyIslamicEvent() {
+const  maybeNotifyIslamicEvent= async () =>{
   const today = getHijriToday();
   if (!today) return;
   const events = [
@@ -253,4 +316,45 @@ chrome.notifications.onButtonClicked.addListener(async () => {
   const item = await chrome.storage.sync.get(['minutes']);
   chrome.action.setBadgeText({ text: 'ON' });
   chrome.alarms.create({ delayInMinutes: item.minutes });
+});
+
+// Handle messages from options page
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === 'testNotifications') {
+    // Send test notifications immediately
+    chrome.notifications.create({
+      type: 'basic',
+      iconUrl: '../images/ramadan.png',
+      title: 'Test Hadith Notification',
+      message: 'This is a test hadith notification',
+      priority: 0
+    });
+    
+    chrome.notifications.create({
+      type: 'basic',
+      iconUrl: '../images/ramadan.png',
+      title: 'Test Quran Notification',
+      message: 'This is a test Quran notification',
+      priority: 0
+    });
+    
+    chrome.notifications.create({
+      type: 'basic',
+      iconUrl: '../images/ramadan.png',
+      title: 'Test Event Notification',
+      message: 'This is a test Islamic event notification',
+      priority: 0
+    });
+    
+    sendResponse({ success: true });
+  } else if (message.action === 'rescheduleAlarms') {
+    console.log('Manual alarm rescheduling requested');
+    scheduleAlarmsFromSettings().then(() => {
+      sendResponse({ success: true });
+    }).catch((error) => {
+      console.error('Error rescheduling alarms:', error);
+      sendResponse({ success: false, error: error.message });
+    });
+    return true; // Keep message channel open for async response
+  }
 });

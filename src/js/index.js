@@ -5,8 +5,8 @@ var addClass = ej.base.addClass;
 var islamicEvents = [
   { month: 1, day: 10, label: 'Ashura' },
   { month: 3, day: 12, label: 'Mawlid' },
-  { month: 7, day: 27, label: 'Isra and Mi7raj' },
-  { month: 8, day: 15, label: 'Mid-Sha7ban' },
+  { month: 7, day: 27, label: 'Isra and Miraj' },
+  { month: 8, day: 15, label: 'Mid-Shaban' },
   { month: 9, day: 1, label: 'Ramadan Begins' },
   { month: 9, day: 27, label: 'Laylat al-Qadr (27th)' },
   { month: 10, day: 1, label: 'Eid al-Fitr' },
@@ -14,7 +14,7 @@ var islamicEvents = [
   { month: 12, day: 10, label: 'Eid al-Adha' }
 ];
 
-function getHijriParts(date) {
+const getHijriParts= (date)=> {
   // Use Intl with Islamic calendar to obtain hijri month/day
   try {
     var fmt = new Intl.DateTimeFormat('en-u-ca-islamic', { day: 'numeric', month: 'numeric', year: 'numeric' });
@@ -27,7 +27,7 @@ function getHijriParts(date) {
   }
 }
 
-function decorateIfIslamicEvent(args) {
+const decorateIfIslamicEvent=(args)=> {
   var hijri = getHijriParts(args.date);
   if (!hijri) { return; }
   for (var i = 0; i < islamicEvents.length; i++) {
