@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Theme Settings - Muslim Companion</title>
+  <link rel="stylesheet" href="../src/styles/theme.css">
+  <link rel="stylesheet" href="../src/styles/styles.css">
+  <style>
+    .theme-settings-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .theme-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .theme-header h1 {
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+    }
+
+    .theme-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .theme-card {
+      background: var(--surface-color);
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: all var(--transition-normal);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .theme-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .theme-card.active {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
+    }
+
+    .theme-card.active::before {
+      content: '✓';
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: var(--primary-color);
+      color: white;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .theme-preview {
+      height: 120px;
+      border-radius: var(--radius-md);
+      margin-bottom: 1rem;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: var(--font-size-lg);
+    }
+
+    .theme-info h3 {
+      margin: 0 0 0.5rem 0;
+      color: var(--text-color);
+    }
+
+    .theme-info p {
+      margin: 0;
+      color: var(--text-secondary-color);
+      font-size: var(--font-size-sm);
+    }
+
+    .theme-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .customization-section {
+      background: var(--surface-color);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .customization-section h2 {
+      margin: 0 0 1.5rem 0;
+      color: var(--text-color);
+    }
+
+    .color-picker-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .color-picker-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .color-picker-item label {
+      font-weight: 500;
+      color: var(--text-color);
+    }
+
+    .color-input {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .color-input input[type="color"] {
+      width: 50px;
+      height: 40px;
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+    }
+
+    .color-input input[type="text"] {
+      flex: 1;
+      padding: 0.5rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      background: var(--background-color);
+      color: var(--text-color);
+    }
+
+    .preview-section {
+      background: var(--surface-color);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .preview-section h2 {
+      margin: 0 0 1.5rem 0;
+      color: var(--text-color);
+    }
+
+    .preview-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .preview-card {
+      background: var(--background-color);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+    }
+
+    .preview-card h4 {
+      margin: 0 0 0.5rem 0;
+      color: var(--text-color);
+    }
+
+    .preview-card p {
+      margin: 0 0 1rem 0;
+      color: var(--text-secondary-color);
+      font-size: var(--font-size-sm);
+    }
+
+    .preview-buttons {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .reset-button {
+      background: var(--error-color);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .reset-button:hover {
+      opacity: 0.9;
+    }
+
+    .save-button {
+      background: var(--success-color);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .save-button:hover {
+      opacity: 0.9;
+    }
+
+    .export-import {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .export-import button {
+      background: var(--secondary-color);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .export-import button:hover {
+      opacity: 0.9;
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    .file-input-label {
+      background: var(--info-color);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      display: inline-block;
+    }
+
+    .file-input-label:hover {
+      opacity: 0.9;
+    }
+
+    @media (max-width: 768px) {
+      .theme-settings-container {
+        padding: 1rem;
+      }
+      
+      .theme-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .color-picker-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .preview-content {
+        grid-template-columns: 1fr;
+      }
+      
+      .export-import {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="theme-settings-container">
+    <div class="theme-header">
+      <h1>🎨 Theme Settings</h1>
+      <p>Customize the appearance of your Muslim Companion extension</p>
+    </div>
+
+    <div class="customization-section">
+      <h2>Choose Your Theme</h2>
+      <div class="theme-grid" id="themeGrid">
+        <!-- Theme cards will be populated by JavaScript -->
+      </div>
+    </div>
+
+    <div class="customization-section">
+      <h2>Customize Colors</h2>
+      <div class="color-picker-grid" id="colorPickers">
+        <!-- Color pickers will be populated by JavaScript -->
+      </div>
+      <div class="theme-actions">
+        <button class="reset-button" id="resetColors">Reset to Default</button>
+        <button class="save-button" id="saveCustomColors">Save Custom Colors</button>
+      </div>
+    </div>
+
+    <div class="preview-section">
+      <h2>Live Preview</h2>
+      <div class="preview-content">
+        <div class="preview-card">
+          <h4>Sample Card</h4>
+          <p>This is how your content will look with the selected theme.</p>
+          <div class="preview-buttons">
+            <button class="btn btn-primary">Primary Button</button>
+            <button class="btn btn-secondary">Secondary Button</button>
+          </div>
+        </div>
+        <div class="preview-card">
+          <h4>Sample Form</h4>
+          <div class="form-group">
+            <label class="form-label">Sample Input</label>
+            <input type="text" class="form-input" placeholder="Enter text here">
+          </div>
+          <div class="preview-buttons">
+            <button class="btn btn-outline">Outline Button</button>
+          </div>
+        </div>
+        <div class="preview-card">
+          <h4>Sample Alerts</h4>
+          <div class="alert alert-info">This is an info alert</div>
+          <div class="alert alert-success">This is a success alert</div>
+          <div class="preview-buttons">
+            <span class="badge badge-primary">Primary Badge</span>
+            <span class="badge badge-secondary">Secondary Badge</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="customization-section">
+      <h2>Export & Import</h2>
+      <p>Save your theme settings or load them on another device</p>
+      <div class="export-import">
+        <button class="export-import" id="exportTheme">📤 Export Theme</button>
+        <label for="importThemeFile" class="file-input-label">📥 Import Theme</label>
+        <input type="file" id="importThemeFile" class="file-input" accept=".json">
+      </div>
+    </div>
+  </div>
+
+  <script src="../src/js/theme-manager.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeThemeSettings();
+    });
+
+    function initializeThemeSettings() {
+      populateThemeGrid();
+      populateColorPickers();
+      setupEventListeners();
+      updatePreview();
+    }
+
+    function populateThemeGrid() {
+      const themeGrid = document.getElementById('themeGrid');
+      const themes = themeManager.availableThemes;
+      
+      themeGrid.innerHTML = '';
+      
+      themes.forEach(themeName => {
+        const config = themeManager.getThemeConfig(themeName);
+        const isActive = themeName === themeManager.getCurrentTheme();
+        
+        const themeCard = document.createElement('div');
+        themeCard.className = `theme-card ${isActive ? 'active' : ''}`;
+        themeCard.dataset.theme = themeName;
+        
+        themeCard.innerHTML = `
+          <div class="theme-preview" style="background: ${config.colors.background}">
+            ${config.icon} ${config.name}
+          </div>
+          <div class="theme-info">
+            <h3>${config.name}</h3>
+            <p>${getThemeDescription(themeName)}</p>
+          </div>
+        `;
+        
+        themeCard.addEventListener('click', () => {
+          selectTheme(themeName);
+        });
+        
+        themeGrid.appendChild(themeCard);
+      });
+    }
+
+    function getThemeDescription(themeName) {
+      const descriptions = {
+        light: 'Clean and bright interface for daytime use',
+        dark: 'Easy on the eyes for low-light environments',
+        soft: 'Gentle, warm colors for a calming experience',
+        ramadan: 'Special theme celebrating the holy month',
+        eid: 'Festive theme for Eid celebrations'
+      };
+      return descriptions[themeName] || 'Custom theme configuration';
+    }
+
+    function selectTheme(themeName) {
+      // Update active state
+      document.querySelectorAll('.theme-card').forEach(card => {
+        card.classList.remove('active');
+      });
+      document.querySelector(`[data-theme="${themeName}"]`).classList.add('active');
+      
+      // Apply theme
+      themeManager.setTheme(themeName);
+      
+      // Update preview
+      updatePreview();
+    }
+
+    function populateColorPickers() {
+      const colorPickers = document.getElementById('colorPickers');
+      const currentConfig = themeManager.getCurrentThemeConfig();
+      
+      colorPickers.innerHTML = '';
+      
+      Object.entries(currentConfig.colors).forEach(([colorName, colorValue]) => {
+        const colorItem = document.createElement('div');
+        colorItem.className = 'color-picker-item';
+        
+        colorItem.innerHTML = `
+          <label for="${colorName}">${formatColorName(colorName)}</label>
+          <div class="color-input">
+            <input type="color" id="${colorName}" value="${colorValue}" data-color-name="${colorName}">
+            <input type="text" value="${colorValue}" data-color-name="${colorName}" class="color-text-input">
+          </div>
+        `;
+        
+        // Add event listeners
+        const colorInput = colorItem.querySelector('input[type="color"]');
+        const textInput = colorItem.querySelector('input[type="text"]');
+        
+        colorInput.addEventListener('change', (e) => {
+          const newColor = e.target.value;
+          textInput.value = newColor;
+          updateCustomColor(colorName, newColor);
+        });
+        
+        textInput.addEventListener('input', (e) => {
+          const newColor = e.target.value;
+          if (isValidHexColor(newColor)) {
+            colorInput.value = newColor;
+            updateCustomColor(colorName, newColor);
+          }
+        });
+        
+        colorPickers.appendChild(colorItem);
+      });
+    }
+
+    function formatColorName(colorName) {
+      return colorName
+        .replace(/([A-Z])/g, ' $1')
+        .replace(/^./, str => str.toUpperCase());
+    }
+
+    function isValidHexColor(color) {
+      return /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(color);
+    }
+
+    function updateCustomColor(colorName, colorValue) {
+      const currentConfig = themeManager.getCurrentThemeConfig();
+      currentConfig.colors[colorName] = colorValue;
+      
+      // Apply the updated theme
+      themeManager.applyTheme();
+      
+      // Update preview
+      updatePreview();
+    }
+
+    function updatePreview() {
+      // The preview will automatically update as the theme changes
+      // since it uses CSS custom properties
+    }
+
+    function setupEventListeners() {
+      // Reset colors button
+      document.getElementById('resetColors').addEventListener('click', () => {
+        resetToDefaultColors();
+      });
+      
+      // Save custom colors button
+      document.getElementById('saveCustomColors').addEventListener('click', () => {
+        saveCustomTheme();
+      });
+      
+      // Export theme button
+      document.getElementById('exportTheme').addEventListener('click', () => {
+        exportTheme();
+      });
+      
+      // Import theme file input
+      document.getElementById('importThemeFile').addEventListener('change', (e) => {
+        importTheme(e.target.files[0]);
+      });
+      
+      // Listen for theme changes
+      window.addEventListener('themeChanged', () => {
+        populateThemeGrid();
+        populateColorPickers();
+      });
+    }
+
+    function resetToDefaultColors() {
+      const currentTheme = themeManager.getCurrentTheme();
+      const defaultConfig = themeManager.getThemeConfigs[currentTheme];
+      
+      // Reset to default colors
+      Object.entries(defaultConfig.colors).forEach(([colorName, colorValue]) => {
+        updateCustomColor(colorName, colorValue);
+        
+        // Update input values
+        const colorInput = document.querySelector(`input[data-color-name="${colorName}"]`);
+        const textInput = document.querySelector(`input[data-color-name="${colorName}"].color-text-input`);
+        
+        if (colorInput) colorInput.value = colorValue;
+        if (textInput) textInput.value = colorValue;
+      });
+    }
+
+    function saveCustomTheme() {
+      const currentConfig = themeManager.getCurrentThemeConfig();
+      const customThemeName = `custom_${Date.now()}`;
+      
+      // Save custom theme
+      themeManager.themeConfigs[customThemeName] = {
+        name: 'Custom Theme',
+        icon: '🎨',
+        colors: { ...currentConfig.colors }
+      };
+      
+      // Add to available themes
+      themeManager.availableThemes.push(customThemeName);
+      
+      // Apply the custom theme
+      themeManager.setTheme(customThemeName);
+      
+      // Show success message
+      showAlert('Custom theme saved successfully!', 'success');
+    }
+
+    function exportTheme() {
+      const themeData = themeManager.exportThemeConfig();
+      const dataStr = JSON.stringify(themeData, null, 2);
+      const dataBlob = new Blob([dataStr], { type: 'application/json' });
+      
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(dataBlob);
+      link.download = `muslim-companion-theme-${Date.now()}.json`;
+      link.click();
+    }
+
+    function importTheme(file) {
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const themeData = JSON.parse(e.target.result);
+          themeManager.importThemeConfig(themeData);
+          
+          // Refresh the interface
+          populateThemeGrid();
+          populateColorPickers();
+          
+          showAlert('Theme imported successfully!', 'success');
+        } catch (error) {
+          showAlert('Error importing theme. Please check the file format.', 'error');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function showAlert(message, type) {
+      // Create alert element
+      const alert = document.createElement('div');
+      alert.className = `alert alert-${type}`;
+      alert.textContent = message;
+      
+      // Add to page
+      document.body.appendChild(alert);
+      
+      // Remove after 3 seconds
+      setTimeout(() => {
+        alert.remove();
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

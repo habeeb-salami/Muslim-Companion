@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Muslim Companion",
   "version": "1.0.0",
-  "description": "Lightweight, privacy-first Islamic tools: prayer times, Qibla, Quran/Hadith, Hijri calendar.",
+  "description": "Lightweight, privacy-first Islamic tools: prayer times, Qibla, Quran/Hadith, Hijri calendar. Also includes a beautiful Islamic-themed Chrome theme.",
   "action": {
     "default_title": "Muslim Companion",
     "default_popup": "./src/home.html"
@@ -23,5 +23,49 @@
     "48": "/src/images/ramadan-48x48.png",
     "128": "/src/images/ramadan-128x128.png"
   },
-  "minimum_chrome_version": "112"
+  "minimum_chrome_version": "112",
+  "chrome_url_overrides": {
+    "newtab": "./src/theme/newtab.html"
+  },
+  "theme": {
+    "images": {
+      "theme_frame": "/src/images/theme_frame.png",
+      "theme_toolbar": "/src/images/theme_toolbar.png",
+      "theme_tab_background": "/src/images/theme_tab_background.png",
+      "theme_ntp_background": "/src/images/theme_ntp_background.png"
+    },
+    "colors": {
+      "frame": [26, 26, 46],
+      "frame_inactive": [22, 33, 62],
+      "frame_incognito": [15, 52, 96],
+      "frame_incognito_inactive": [15, 52, 96],
+      "toolbar": [22, 33, 62],
+      "tab_text": [255, 255, 255],
+      "tab_background_text": [255, 255, 255],
+      "bookmark_text": [255, 255, 255],
+      "ntp_background": [15, 52, 96],
+      "ntp_text": [255, 255, 255],
+      "ntp_link": [233, 69, 96],
+      "ntp_link_underline": [233, 69, 96],
+      "ntp_header": [255, 255, 255],
+      "ntp_section": [22, 33, 62],
+      "ntp_section_text": [255, 255, 255],
+      "ntp_section_link": [233, 69, 96],
+      "ntp_section_link_underline": [233, 69, 96],
+      "button_background": [233, 69, 96]
+    },
+    "tints": {
+      "buttons": [0.5, 0.5, 0.5],
+      "frame": [0.5, 0.5, 0.5],
+      "frame_inactive": [0.5, 0.5, 0.5],
+      "frame_incognito": [0.5, 0.5, 0.5],
+      "frame_incognito_inactive": [0.5, 0.5, 0.5],
+      "background_tab": [0.5, 0.5, 0.5]
+    },
+    "properties": {
+      "ntp_logo_alternate": 0.84,
+      "ntp_background_alignment": "bottom",
+      "ntp_background_repeat": "no-repeat"
+    }
+  }
 }

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Muslim Companion - New Tab</title>
+  <link rel="stylesheet" href="../styles/theme.css">
+  <link rel="stylesheet" href="../styles/styles.css">
+  <style>
+    body {
+      background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #3b82f6 100%);
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('../images/bg2.jpg') center/cover;
+      opacity: 0.3;
+      z-index: -1;
+    }
+
+    .container {
+      text-align: center;
+      z-index: 1;
+      max-width: 800px;
+      padding: 2rem;
+    }
+
+    .header {
+      margin-bottom: 3rem;
+    }
+
+    .title {
+      font-size: 3.5rem;
+      font-weight: 300;
+      margin: 0;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      background: linear-gradient(45deg, #fbbf24, #f59e0b, #d97706);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      margin: 1rem 0;
+      opacity: 0.9;
+      font-weight: 300;
+    }
+
+    .date-time {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 2rem;
+      margin: 2rem 0;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .hijri-date {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #fbbf24;
+    }
+
+    .gregorian-date {
+      font-size: 1.2rem;
+      opacity: 0.8;
+    }
+
+    .prayer-times {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .prayer-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .prayer-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .prayer-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #fbbf24;
+    }
+
+    .prayer-time {
+      font-size: 1.5rem;
+      font-weight: 300;
+    }
+
+    .next-prayer {
+      background: linear-gradient(45deg, #fbbf24, #f59e0b);
+      color: #1e3a8a;
+      font-weight: 600;
+      border: none;
+    }
+
+    .quick-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .action-btn {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 25px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    .action-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 0.5rem;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .theme-toggle:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+    }
+
+    @media (max-width: 768px) {
+      .title {
+        font-size: 2.5rem;
+      }
+      
+      .prayer-times {
+        grid-template-columns: 1fr;
+      }
+      
+      .quick-actions {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="theme-toggle" id="themeToggle" title="Toggle Theme">
+    🌙
+  </div>
+
+  <div class="container">
+    <div class="header">
+      <h1 class="title">Muslim Companion</h1>
+      <p class="subtitle">Your daily Islamic companion</p>
+    </div>
+
+    <div class="date-time">
+      <div class="hijri-date" id="hijriDate">Loading...</div>
+      <div class="gregorian-date" id="gregorianDate">Loading...</div>
+    </div>
+
+    <div class="prayer-times" id="prayerTimes">
+      <!-- Prayer times will be populated by JavaScript -->
+    </div>
+
+    <div class="quick-actions">
+      <a href="#" class="action-btn" id="quranBtn">📖 Quran</a>
+      <a href="#" class="action-btn" id="hadithBtn">📚 Hadith</a>
+      <a href="#" class="action-btn" id="qiblaBtn">🕋 Qibla</a>
+      <a href="#" class="action-btn" id="calendarBtn">📅 Calendar</a>
+    </div>
+  </div>
+
+  <script src="../js/praytimes.js"></script>
+  <script src="../js/theme-manager.js"></script>
+  <script>
+    // Initialize the new tab page
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeNewTab();
+    });
+
+    function initializeNewTab() {
+      // Update date and time
+      updateDateTime();
+      
+      // Update prayer times
+      updatePrayerTimes();
+      
+      // Set up event listeners
+      setupEventListeners();
+      
+      // Update every minute
+      setInterval(updateDateTime, 60000);
+    }
+
+    function updateDateTime() {
+      const now = new Date();
+      
+      // Update Gregorian date
+      const gregorianOptions = { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      };
+      document.getElementById('gregorianDate').textContent = now.toLocaleDateString('en-US', gregorianOptions);
+      
+      // Update Hijri date (simplified - you can integrate with a proper Hijri calendar library)
+      const hijriDate = getHijriDate(now);
+      document.getElementById('hijriDate').textContent = hijriDate;
+    }
+
+    function getHijriDate(date) {
+      // Simplified Hijri date calculation
+      // In a real implementation, you'd use a proper Hijri calendar library
+      const year = date.getFullYear();
+      const hijriYear = year - 622;
+      const hijriMonth = getHijriMonth(date.getMonth());
+      const hijriDay = Math.floor(date.getDate() * 1.03); // Approximate conversion
+      
+      return `${hijriMonth} ${hijriDay}, ${hijriYear} AH`;
+    }
+
+    function getHijriMonth(month) {
+      const months = [
+        'Muharram', 'Safar', 'Rabi al-Awwal', 'Rabi al-Thani',
+        'Jumada al-Awwal', 'Jumada al-Thani', 'Rajab', 'Sha\'ban',
+        'Ramadan', 'Shawwal', 'Dhu al-Qadah', 'Dhu al-Hijjah'
+      ];
+      return months[month];
+    }
+
+    function updatePrayerTimes() {
+      // This would integrate with your existing prayer times functionality
+      const prayerTimes = [
+        { name: 'Fajr', time: '5:30 AM' },
+        { name: 'Dhuhr', time: '12:30 PM' },
+        { name: 'Asr', time: '3:45 PM' },
+        { name: 'Maghrib', time: '6:30 PM' },
+        { name: 'Isha', time: '8:00 PM' }
+      ];
+
+      const container = document.getElementById('prayerTimes');
+      container.innerHTML = '';
+
+      prayerTimes.forEach((prayer, index) => {
+        const card = document.createElement('div');
+        card.className = 'prayer-card';
+        if (index === 1) card.classList.add('next-prayer'); // Highlight next prayer
+        
+        card.innerHTML = `
+          <div class="prayer-name">${prayer.name}</div>
+          <div class="prayer-time">${prayer.time}</div>
+        `;
+        
+        container.appendChild(card);
+      });
+    }
+
+    function setupEventListeners() {
+      // Theme toggle
+      document.getElementById('themeToggle').addEventListener('click', function() {
+        toggleTheme();
+      });
+
+      // Quick action buttons
+      document.getElementById('quranBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        // Open Quran page or functionality
+        console.log('Quran button clicked');
+      });
+
+      document.getElementById('hadithBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        // Open Hadith page or functionality
+        console.log('Hadith button clicked');
+      });
+
+      document.getElementById('qiblaBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        // Open Qibla page or functionality
+        console.log('Qibla button clicked');
+      });
+
+      document.getElementById('calendarBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        // Open Calendar page or functionality
+        console.log('Calendar button clicked');
+      });
+    }
+
+    function toggleTheme() {
+      const body = document.body;
+      const themeToggle = document.getElementById('themeToggle');
+      
+      if (body.classList.contains('dark-theme')) {
+        body.classList.remove('dark-theme');
+        themeToggle.textContent = '🌙';
+        themeToggle.title = 'Switch to Dark Theme';
+      } else {
+        body.classList.add('dark-theme');
+        themeToggle.textContent = '☀️';
+        themeToggle.title = 'Switch to Light Theme';
+      }
+      
+      // Save theme preference
+      localStorage.setItem('newtab-theme', body.classList.contains('dark-theme') ? 'dark' : 'light');
+    }
+
+    // Load saved theme preference
+    function loadThemePreference() {
+      const savedTheme = localStorage.getItem('newtab-theme');
+      if (savedTheme === 'dark') {
+        document.body.classList.add('dark-theme');
+        document.getElementById('themeToggle').textContent = '☀️';
+        document.getElementById('themeToggle').title = 'Switch to Light Theme';
+      }
+    }
+
+    // Load theme on page load
+    loadThemePreference();
+  </script>
+</body>
+</html>
