@@ -225,7 +225,7 @@
       initializeNewTab();
     });
 
-    function initializeNewTab() {
+    const initializeNewTab = () => {
       // Update date and time
       updateDateTime();
       
@@ -239,7 +239,7 @@
       setInterval(updateDateTime, 60000);
     }
 
-    function updateDateTime() {
+    const updateDateTime = () => {
       const now = new Date();
       
       // Update Gregorian date
@@ -256,7 +256,7 @@
       document.getElementById('hijriDate').textContent = hijriDate;
     }
 
-    function getHijriDate(date) {
+    const getHijriDate = (date) => {
       // Simplified Hijri date calculation
       // In a real implementation, you'd use a proper Hijri calendar library
       const year = date.getFullYear();
@@ -267,7 +267,7 @@
       return `${hijriMonth} ${hijriDay}, ${hijriYear} AH`;
     }
 
-    function getHijriMonth(month) {
+    const getHijriMonth = (month) => {
       const months = [
         'Muharram', 'Safar', 'Rabi al-Awwal', 'Rabi al-Thani',
         'Jumada al-Awwal', 'Jumada al-Thani', 'Rajab', 'Sha\'ban',
@@ -276,7 +276,7 @@
       return months[month];
     }
 
-    function updatePrayerTimes() {
+    const updatePrayerTimes = () => {
       // This would integrate with your existing prayer times functionality
       const prayerTimes = [
         { name: 'Fajr', time: '5:30 AM' },
@@ -303,7 +303,7 @@
       });
     }
 
-    function setupEventListeners() {
+    const setupEventListeners = () => {
       // Theme toggle
       document.getElementById('themeToggle').addEventListener('click', function() {
         toggleTheme();
@@ -335,7 +335,7 @@
       });
     }
 
-    function toggleTheme() {
+    const toggleTheme = () => {
       const body = document.body;
       const themeToggle = document.getElementById('themeToggle');
       
@@ -354,7 +354,7 @@
     }
 
     // Load saved theme preference
-    function loadThemePreference() {
+    const loadThemePreference = () => {
       const savedTheme = localStorage.getItem('newtab-theme');
       if (savedTheme === 'dark') {
         document.body.classList.add('dark-theme');
